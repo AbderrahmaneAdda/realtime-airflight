@@ -1,15 +1,14 @@
+from kafka import KafkaProducer
+from dotenv import load_dotenv
+from src.config import BROKER_URL, TOPIC_NAME, OPEN_SKY_URL, FRANCE_BOUNDS
 import requests
 import json
 import time
 import logging
 import os
-from kafka import KafkaProducer
-from dotenv import load_dotenv
-from src.config import BROKER_URL, TOPIC_NAME, OPEN_SKY_URL, FRANCE_BOUNDS
-
-# Charger les credentials depuis le fichier .env
 
 logging.basicConfig(level=logging.INFO)
+
 
 def is_in_france(lat, lon):
     return (
@@ -26,9 +25,9 @@ def fetch_flight_data():
         filtered = []
 
         for state in states:
-            if state[5] is not None and state[6] is not None:  # latitude and longitude
-                lat = state[6]
-                lon = state[5]
+            if state[5] is not None and state[6] is not None: 
+                lat = state[6] #lat
+                lon = state[5] #long
                 if is_in_france(lat, lon):
                     filtered.append({
                         "icao24": state[0],
@@ -53,13 +52,13 @@ def main():
         bootstrap_servers=BROKER_URL,
         value_serializer=lambda v: json.dumps(v).encode('utf-8')
     )
-    logging.info("Producteur Kafka initialisé.")
+    logging.info("Producteur Kafka initialisé")
 
     while True:
         flights = fetch_flight_data()
         for flight in flights:
             producer.send(TOPIC_NAME, flight)
-            logging.info(f"Données envoyées: {flight.get('icao24')} ({flight.get('callsign')})")
+            logging.info(f"Données envoyées: {flight.get('icao24')}")
         time.sleep(60)  # ne pas surcharger l’API
 
 if __name__ == "__main__":

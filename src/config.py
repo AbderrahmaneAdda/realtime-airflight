@@ -1,15 +1,13 @@
-# src/config.py
-
-BROKER_URL = 'localhost:9092'  # Utiliser localhost quand on est en dehors du réseau Docker
-TOPIC_NAME = 'flights-raw'  # Nom du topic Kafka
-OPEN_SKY_URL = 'https://opensky-network.org/api/states/all'  # URL de l'API OpenSky
+BROKER_URL = 'localhost:9092'
+TOPIC_NAME = 'flights-raw'  # topic Kafka
+OPEN_SKY_URL = 'https://opensky-network.org/api/states/all'  # URL API OpenSky
 
 # Configuration pour le producteur Kafka
 KAFKA_PRODUCER_CONFIG = {
     'bootstrap_servers': [BROKER_URL],
-    'request_timeout_ms': 60000,  # Timeout à 60 secondes
-    'metadata_max_age_ms': 300000,  # Délai pour actualiser les métadonnées (5 minutes)
-    'retries': 5,  # Tentatives en cas d'échec de connexion
+    'request_timeout_ms': 60000,  # 60 s
+    'metadata_max_age_ms': 300000,  # 5 min
+    'retries': 5,
     'acks': 'all',  # Attente de la confirmation de tous les réplicas
 }
 

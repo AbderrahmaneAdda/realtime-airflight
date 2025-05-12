@@ -23,7 +23,6 @@ def main():
 
     logging.info(f"[OK] Connecté au topic Kafka '{TOPIC_NAME}'. Début du comptage...")
 
-    # Initialisation de last_print_time pour éviter l'erreur
     last_print_time = time.time()
 
     try:
@@ -31,7 +30,7 @@ def main():
             flight = message.value
             icao24 = flight.get("icao24")
 
-            # Vérifier si le vol est toujours en vol
+            # Vérifier si vol est toujours en vol
             if flight.get("on_ground"):
                 if icao24 in flights_in_air:
                     del flights_in_air[icao24]  # Supprimer le vol du dictionnaire si "on ground"
